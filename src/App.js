@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+// Views
+import Registrar from './views/Registrar';
+import Login from './views/Login';
+import Dashboard from './views/Dashboard';
+
+// Template
+import Template from './components/Template';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+      default: '#111', // fundo da página
+      paper: '#1e1e1e', // fundo de elementos como cards
+    },
+    text: {
+      primary: '#fff',
+    },
+  },
+});
+
+const Middleware = () => {
+  const isLogged = localStorage.getItem('logado') === 'true';
+
+  return isLogged ? (
+    <Template>
+      <Outlet />
+    </Template>
+  ) : (
+    <Navigate to="/login" />
   );
-}
+};
+
+const App = () => {
+  return (
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registrar" element={<Registrar />} />
+          <Route element={<Middleware />}>
+            {/* Suas rotas protegidas vão aqui */}
+            <Route path="/dashboard" element={<Dashboard/>} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
+};
 
 export default App;
