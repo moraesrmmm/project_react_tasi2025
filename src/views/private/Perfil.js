@@ -36,18 +36,7 @@ const Perfil = () => {
             <p><strong>Usuário:</strong> {perfil.usuario}</p>
             <p><strong>Hora do acesso:</strong> {perfil.horaAcesso}</p>
             <p><strong>Token:</strong> <span style={{ wordBreak: 'break-all' }}>{perfil.token}</span></p>
-            <button
-                onClick={encerrarSessao}
-                style={{
-                    marginTop: 24,
-                    padding: '10px 20px',
-                    background: '#d32f2f',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: 4,
-                    cursor: 'pointer'
-                }}
-            >
+            <button onClick={encerrarSessao} style={{ marginTop: 24, padding: '10px 20px', background: '#d32f2f', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer'}}>
                 Encerrar Sessão
             </button>
         </div>
