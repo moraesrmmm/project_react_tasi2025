@@ -3,16 +3,27 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
 // Views
+
+// Públicas
 import Registrar from './views/Registrar';
 import Login from './views/Login';
-import Dashboard from './views/Dashboard';
+import Dashboard from './views/private/Dashboard';
 import Home from './views/public/Home';
 import ProdutoDetalhes from './views/public/ProdutoDetalhes';
+
+// Privadas
+
+import Categorias from './views/private/Categorias';
+import NovaCategoria from './views/private/NovaCategoria';
+import EditarCategoria from './views/private/EditarCategoria';
+import Produtos from './views/private/Produtos';
+import NovoProduto from './views/private/NovoProduto';
+import EditarProduto from './views/private/EditarProduto';
+import Perfil from './views/private/Perfil';
 
 // Template
 import TemplateAdmin from './components/TemplateAdmin';
 import TemplatePublic from './components/TemplatePublic';
-import { lightBlue } from '@mui/material/colors';
 
 const darkTheme = createTheme({
   palette: {
@@ -33,7 +44,7 @@ const Middleware = () => {
   return isLogged? (
     <Outlet />
   ) : (
-    <Navigate to="/login" />
+    <Navigate to="/home" />
   );
 };
 
@@ -63,14 +74,21 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/registrar" element={<Registrar />} />
           <Route element={<TemplatePublic />}>
-            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/" element={<Navigate to="/home" />} />
             <Route path="/home" element={<Home />} />
-            <Route path="produto/:id" element={<ProdutoDetalhes />} />
+            <Route path="produto/:nome" element={<ProdutoDetalhes />} />
           </Route>
 
           <Route element={<Middleware />}>
             <Route element={<TemplateAdmin />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/produtos" element={<Produtos />} />
+              <Route path="/produtos/novo" element={<NovoProduto />} />
+              <Route path="/produtos/editar/:nome" element={<EditarProduto />} />
+              <Route path="/categorias" element={<Categorias />} />
+              <Route path="/categorias/nova" element={<NovaCategoria />} />
+              <Route path="/categorias/editar/:nome" element={<EditarCategoria />} />
+              <Route path="/perfil" element={<Perfil />} />
             </Route>
           </Route>
         </Routes>

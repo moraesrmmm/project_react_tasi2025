@@ -4,59 +4,73 @@ import { Outlet } from 'react-router-dom';
 import { DashboardLayout, AppProvider, PageContainer } from '@toolpad/core';
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import DescriptionIcon from '@mui/icons-material/Description';
 import LayersIcon from '@mui/icons-material/Layers';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
+// Defina o ícone de produto (exemplo: use DashboardIcon ou crie um novo)
+const ProductIcon = DashboardIcon; // Ou substitua por outro ícone do MUI
 
 const NAVIGATION = [
-    {
-      kind: 'header',
-      title: 'Main items',
-    },
-    {
-      segment: 'dashboard',
-      title: 'Dashboard',
-      icon: <DashboardIcon />,
-    },
-    {
-      segment: 'orders',
-      title: 'Orders',
-      icon: <ShoppingCartIcon />,
-    },
-    {
-      kind: 'divider',
-    },
-    {
-      kind: 'header',
-      title: 'Analytics',
-    },
-    {
-      segment: 'reports',
-      title: 'Reports',
-      icon: <BarChartIcon />,
-      children: [
-        {
-          segment: 'sales',
-          title: 'Sales',
-          icon: <DescriptionIcon />,
-        },
-        {
-          segment: 'traffic',
-          title: 'Traffic',
-          icon: <DescriptionIcon />,
-        },
-      ],
-    },
-    {
-      segment: 'integrations',
-      title: 'Integrations',
-      icon: <LayersIcon />,
-    },
-  ];
+  {
+    kind: 'header',
+    title: 'Cadastro',
+  },
+  {
+    segment: 'produtos',
+    title: 'Produtos',
+    icon: <ProductIcon />,
+  },
+  {
+    segment: 'categorias',
+    title: 'Categorias',
+    icon: <LayersIcon />,
+  },
+  {
+    kind: 'divider',
+  },
+  {
+    kind: 'header',
+    title: 'Vendas',
+  },
+  {
+    segment: 'vendas',
+    title: 'Vendas',
+    icon: <BarChartIcon />,
+  },
+  {
+    kind: 'divider',
+  },
+  {
+    kind: 'header',
+    title: 'Configurações',
+  },
+  {
+    segment: 'perfil',
+    title: 'Perfil',
+    icon: <AccountCircleIcon />, // Ícone de pessoa
+  },
+];
 
 const demoTheme = createTheme({
-  colorSchemes: { light: true, dark: true },
+  palette: {
+    primary: {
+      main: '#be1e21',
+    },
+    secondary: {
+      main: '#be1e21',
+    },
+  },
+  components: {
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          color: '#be1e21',
+        },
+      },
+    },
+  },
+  colorSchemes: { light: true },
   cssVariables: {
     colorSchemeSelector: 'class',
   },
@@ -70,10 +84,10 @@ const Template = () => {
   };
 
   return (
-    <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}>
+    <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}   branding={{ logo: <img src="https://mui.com/static/logo.png" alt="LojaMassa" />, title: 'LojaMassa', homeUrl: '/toolpad/core/introduction',}}>
       <DashboardLayout>
         <PageContainer>
-          <Outlet /> {/* Aqui serão renderizadas suas views protegidas */}
+          <Outlet />
         </PageContainer>
       </DashboardLayout>
     </AppProvider>

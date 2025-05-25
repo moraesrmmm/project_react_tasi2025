@@ -4,10 +4,10 @@ import { useParams } from 'react-router-dom';
 function ProdutoDetalhes() {
     const [produto, setProduto] = useState(null);
     const [quantidade, setQuantidade] = useState(1);
-    const { id } = useParams();
+    const { nome } = useParams();
 
     useEffect(() => {
-        fetch(`https://backend-completo.vercel.app/app/produtos/${id}`, {
+        fetch(`https://backend-completo.vercel.app/app/produtos/romulo_moraes/${nome}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ function ProdutoDetalhes() {
                 }
             })
             .catch(() => setProduto(null));
-    }, [id]);
+    }, [nome]);
 
     const handleComprar = () => {
         alert(`Compra realizada! Quantidade: ${quantidade}`);

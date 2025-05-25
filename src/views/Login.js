@@ -12,10 +12,8 @@ export default function CustomLogin() {
 
         const ValidaUsuario = async (e) => {
 
-            window.location.href = "/dashboard";
-
             e.preventDefault();
-            var url = 'https://backend-aula.vercel.app/app/login';
+            var url = 'https://backend-completo.vercel.app/app/login';
             var dados = { usuario: usuario, senha: senha };
 
             setError(false);
@@ -34,7 +32,9 @@ export default function CustomLogin() {
                 if (response.data.token) {
                     localStorage.setItem("logado", true);
                     localStorage.setItem("token", response.data.token);
-                    window.location.href = "/";
+                    localStorage.setItem("usuario", usuario);
+                    localStorage.setItem("horaAcesso", new Date().toLocaleString());
+                    window.location.href = "/dashboard";
                 } else {
                     setError(true);
                     setErrorMessage('Usuário ou senha inválidos!');
@@ -76,8 +76,13 @@ export default function CustomLogin() {
                     label="Usuário"
                     type="text"
                     variant="outlined"
-                    InputLabelProps={{ style: { color: '#ccc' } }}
-                    InputProps={{ style: { color: '#fff' } }}
+                    InputLabelProps={{ style: { color: '#000' } }}
+                    InputProps={{ style: { color: '#000' } }}
+                    sx={{
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#be1e21',
+                        },
+                    }}
                     value={usuario}
                     onChange={(e) => setUsuario(e.target.value)}
                 />
@@ -88,8 +93,13 @@ export default function CustomLogin() {
                     label="Senha"
                     type="password"
                     variant="outlined"
-                    InputLabelProps={{ style: { color: '#ccc' } }}
-                    InputProps={{ style: { color: '#fff' } }}
+                    InputLabelProps={{ style: { color: '#000' } }}
+                    InputProps={{ style: { color: '#000' } }}
+                    sx={{
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#be1e21',
+                        },
+                    }}
                     value={senha}
                     onChange={(e) => setSenha(e.target.value)}
                 />
@@ -111,10 +121,10 @@ export default function CustomLogin() {
                     variant="contained"
                     sx={{
                     mt: 2,
-                    backgroundColor: '#61dafb',
-                    color: '#000',
+                    backgroundColor: '#be1e21',
+                    color: '#white',
                     fontWeight: 'bold',
-                    '&:hover': { backgroundColor: '#4dbde9' },
+                    '&:hover': { backgroundColor: '#be1e21' },
                     }}
                     disabled={loading}
                 >
@@ -125,7 +135,7 @@ export default function CustomLogin() {
                     <a
                     href="/forgot-senha"
                     style={{
-                        color: '#61dafb',
+                        color: '#be1e21',
                         textDecoration: 'none',
                     }}
                     >
@@ -137,7 +147,7 @@ export default function CustomLogin() {
                     <a
                     href="/registrar"
                     style={{
-                        color: '#61dafb',
+                        color: '#be1e21',
                         textDecoration: 'none',
                     }}
                     >

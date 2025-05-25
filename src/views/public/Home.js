@@ -4,40 +4,15 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
   const [produtos, setProdutos] = useState([]);
-
   const [loading, setLoading] = useState(true);
 
   const buscaProdutos = async () => {
-    const url = 'https://backend-completo.vercel.app/app/produtos';
-    const loginUrl = 'https://backend-completo.vercel.app/app/login';
-    const loginDados = { usuario: 'romulo_moraes', senha: '159357' };
-    var token = '';
-
+    const url = 'https://backend-completo.vercel.app/app/produtos/romulo_moraes';
     try {
-      const loginResponse = await fetch(loginUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(loginDados)
-      });
-      const loginResult = await loginResponse.json();
-      if (!loginResponse.ok || !loginResult.token) {
-        throw new Error('Falha no login');
+      const response = await fetch(url, {});
+      if (!response.ok) {
+        throw new Error('Erro na resposta da requisição');
       }
-      token = loginResult.token;
-    } catch (error) {
-      console.error('Erro ao fazer login:', error);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
       const aProdutos = await response.json();
       setProdutos(aProdutos);
     } catch (error) {
@@ -50,29 +25,94 @@ const Home = () => {
   useEffect(() => {
     buscaProdutos();
   }, []);
-  
+
+  // Agrupa produtos por categoria
+  const produtosPorCategoria = produtos.reduce((acc, produto) => {
+    const categoria = produto.categoria || 'Sem categoria';
+    if (!acc[categoria]) acc[categoria] = [];
+    acc[categoria].push(produto);
+    return acc;
+  }, {});
+
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', marginTop: '50px', fontSize: '1.5rem' }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '70vh',
+        fontSize: '2rem',
+        color: '#555',
+        fontFamily: 'Arial, sans-serif'
+      }}>
         Carregando produtos...
       </div>
     );
   }
 
   return (
-    <div style={{ padding: '20px', marginLeft: '90px', marginTop: '30px', marginRight: '90px', fontFamily: 'Arial, sans-serif' }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
-        {produtos.map((produto, index) => (
-         <Link to={`/produto/${produto.nome}`} key={index} style={{ textDecoration: 'none' }}>
-            <Card 
-              key={index} 
-              title={produto.nome}
-              price={produto.preco}
-              image={produto.imagem}
-              alt={produto.nome}
-            >
-            </Card>
-         </Link>
+    <div style={{
+      padding: '40px 0',
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%)',
+      fontFamily: 'Arial, sans-serif'
+    }}>
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+        {Object.entries(produtosPorCategoria).map(([categoria, produtos]) => (
+          <div key={categoria} style={{
+            width: '100%',
+            marginBottom: '50px',
+            background: '#fff',
+            borderRadius: '18px',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.07)',
+            padding: '32px 0 24px 0',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}>
+            <h2 style={{
+              fontSize: '2.2rem',
+              color: '#2a2a2a',
+              marginBottom: '28px',
+              letterSpacing: '1px',
+              fontWeight: 700,
+              textAlign: 'center',
+              borderBottom: '2px solid #e5e7eb',
+              width: '60%',
+              paddingBottom: '10px'
+            }}>{categoria}</h2>
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '32px',
+              justifyContent: 'center',
+              width: '100%'
+            }}>
+              {produtos.map((produto) => (
+                <Link
+                  to={`/produto/${produto.nome}`}
+                  key={produto.nome}
+                  style={{
+                    textDecoration: 'none',
+                    transition: 'transform 0.2s',
+                  }}
+                >
+                  <Card
+                    title={produto.nome}
+                    price={produto.preco}
+                    image={produto.imagem}
+                    alt={produto.nome}
+                  />
+                </Link>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </div>
