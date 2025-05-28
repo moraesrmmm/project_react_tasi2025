@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import { useRef } from "react";
 
 const estilos = {
     titulo: {
@@ -78,40 +77,53 @@ export default function EditarProduto() {
     const { nome } = useParams();
     const [nomeProduto, setNomeProduto] = useState("");
     const [quantidade, setQuantidade] = useState(0);
-    const [preco, setPreco] = useState(0);
+    const [preco, setPreco] = useState("");
     const [categoria, setCategoria] = useState("");
     const [descricao, setDescricao] = useState("");
     const [imagem, setImagem] = useState("");
     const [carregando, setCarregando] = useState(false);
     const [sucesso, setSucesso] = useState(null);
     const [erro, setErro] = useState(null);
+    const [categorias, setCategorias] = useState([]);
+    const [miniatura, setMiniatura] = useState("");
+    const refArquivo = useRef(null);
     const navigate = useNavigate();
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) {
             setErro("Token não encontrado. Faça login novamente.");
             return;
         }
+
         setCarregando(true);
-        axios.get(`https://backend-completo.vercel.app/app/produtos/romulo_moraes/${nome}`, {
+
+        const buscarCategorias = axios.get("https://backend-completo.vercel.app/app/categorias", {
             headers: { Authorization: `Bearer ${token}` }
-        })
-        .then(res => {
-            if (res.data && res.data[0]) {
-                const prod = res.data[0];
-                setId(prod._id);
-                setNomeProduto(prod.nome || "");
-                setQuantidade(prod.quantidade || 0);
-                setPreco(prod.preco || 0);
-                setCategoria(prod.categoria || "");
-                setDescricao(prod.descricao || "");
-                setImagem(prod.imagem || "");
-            } else {
-                setErro("Produto não encontrado.");
-            }
-        })
-        .catch(() => setErro("Erro ao buscar produto."))
-        .finally(() => setCarregando(false));
+        });
+
+        const buscarProduto = axios.get(`https://backend-completo.vercel.app/app/produtos/romulo_moraes/${nome}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        Promise.all([buscarCategorias, buscarProduto])
+            .then(([resCat, resProd]) => {
+                setCategorias(resCat.data || []);
+                const prod = resProd.data?.[0];
+                if (prod) {
+                    setId(prod._id);
+                    setNomeProduto(prod.nome || "");
+                    setQuantidade(prod.quantidade || 0);
+                    setPreco(formatarMoeda(String(prod.preco)));
+                    setCategoria(prod.categoria || "");
+                    setDescricao(prod.descricao || "");
+                    setImagem(prod.imagem || "");
+                } else {
+                    setErro("Produto não encontrado.");
+                }
+            })
+            .catch(() => setErro("Erro ao buscar dados."))
+            .finally(() => setCarregando(false));
     }, [nome]);
 
     const aoEnviar = async (e) => {
@@ -126,6 +138,7 @@ export default function EditarProduto() {
             setCarregando(false);
             return;
         }
+
         try {
             const resposta = await axios.put(
                 `https://backend-completo.vercel.app/app/produtos`,
@@ -133,7 +146,7 @@ export default function EditarProduto() {
                     id,
                     nome: nomeProduto,
                     quantidade: Number(quantidade),
-                    preco: Number(preco),
+                    preco: Number(parseMoeda(preco)),
                     categoria,
                     descricao,
                     imagem
@@ -143,7 +156,7 @@ export default function EditarProduto() {
             if (resposta.data && resposta.data._id) {
                 setSucesso("Produto atualizado!");
             } else {
-                setErro(resposta.data.error ? resposta.data.error : "Erro ao atualizar produto.");
+                setErro(resposta.data.error || "Erro ao atualizar produto.");
             }
         } catch (err) {
             setErro("Erro ao atualizar produto.");
@@ -163,6 +176,7 @@ export default function EditarProduto() {
             setCarregando(false);
             return;
         }
+
         try {
             const response = await axios.delete(
                 `https://backend-completo.vercel.app/app/produtos`,
@@ -173,11 +187,11 @@ export default function EditarProduto() {
                     }
                 }
             );
-            if(!response.data.error){
+            if (!response.data.error) {
                 setSucesso("Produto excluído!");
                 setTimeout(() => navigate("/produtos"), 1200);
-            }else{
-                setErro(response.data.error ? response.data.error : "Erro ao excluir produto.");
+            } else {
+                setErro(response.data.error || "Erro ao excluir produto.");
             }
         } catch (err) {
             setErro("Erro ao excluir produto.");
@@ -185,36 +199,38 @@ export default function EditarProduto() {
         setCarregando(false);
     };
 
-    // Referência para o input de arquivo
-    // ...restante do código...
-
-    // Adicione estes estados e refs no início do componente
-    const refArquivo = useRef(null);
-    const [miniatura, setMiniatura] = useState("");
-
-    // Função para clicar no input de arquivo
     const aoClicarAnexar = () => {
         if (refArquivo.current) refArquivo.current.click();
     };
 
-    // Função para processar a imagem anexada
     const aoAnexarImagem = (e) => {
-        const file = e.target.files && e.target.files[0];
+        const file = e.target.files?.[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (ev) => {
                 setMiniatura(ev.target.result);
-                setImagem(ev.target.result); // Salva a imagem como base64
+                setImagem(ev.target.result);
             };
             reader.readAsDataURL(file);
         }
     };
 
-    // Atualize o useEffect para mostrar miniatura se já houver imagem (URL)
+    function formatarMoeda(valor) {
+        if (!valor) return "";
+        let v = valor.replace(/\D/g, "");
+        v = (Number(v) / 100).toFixed(2) + "";
+        v = v.replace(".", ",");
+        v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+        return v;
+    }
+
+    function parseMoeda(valor) {
+        if (!valor) return "";
+        return valor.replace(/\./g, "").replace(",", ".");
+    }
+
     useEffect(() => {
-        if (imagem && imagem.startsWith("data:")) {
-            setMiniatura(imagem);
-        } else if (imagem && imagem.startsWith("http")) {
+        if (imagem?.startsWith("data:") || imagem?.startsWith("http")) {
             setMiniatura(imagem);
         } else {
             setMiniatura("");
@@ -229,7 +245,7 @@ export default function EditarProduto() {
             <hr style={estilos.hr} />
             {erro && (
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 10, backgroundColor: "#BE1E21", padding: 10, borderRadius: 4 }}>
-                    <span style={{ fontWeight: "bold", color: "#fff", fontSize: 18, marginBottom: 0 }}>Ocorreu um erro</span>
+                    <span style={{ fontWeight: "bold", color: "#fff", fontSize: 18 }}>Ocorreu um erro</span>
                     <span style={{ color: "#fff", textAlign: "center" }}>{erro}</span>
                 </div>
             )}
@@ -242,37 +258,45 @@ export default function EditarProduto() {
             ) : (
                 <form onSubmit={aoEnviar}>
                     <div style={estilos.grupoFormulario}>
-                        <input type="text" name="nome" value={nomeProduto} onChange={e => setNomeProduto(e.target.value)} required style={estilos.entrada} placeholder="Digite o nome do produto" disabled={carregando} />
+                        <label style={estilos.rotulo}>Nome:</label>
+                        <input type="text" value={nomeProduto} onChange={e => setNomeProduto(e.target.value)} required style={estilos.entrada} disabled={carregando} />
                     </div>
                     <div style={estilos.grupoFormulario}>
                         <label style={estilos.rotulo}>Quantidade:</label>
-                        <input type="number" name="quantidade" value={quantidade} onChange={e => setQuantidade(e.target.value)} required style={estilos.entrada} placeholder="Digite a quantidade" disabled={carregando} />
+                        <input type="number" value={quantidade} onChange={e => setQuantidade(e.target.value)} required style={estilos.entrada} disabled={carregando} />
                     </div>
                     <div style={estilos.grupoFormulario}>
                         <label style={estilos.rotulo}>Preço:</label>
-                        <input type="number" name="preco" value={preco} onChange={e => setPreco(e.target.value)} required style={estilos.entrada} placeholder="Digite o preço" step="0.01" disabled={carregando} />
+                        <input type="text" value={preco} onChange={e => setPreco(formatarMoeda(e.target.value))} required style={estilos.entrada} disabled={carregando} placeholder="0,00" />
                     </div>
                     <div style={estilos.grupoFormulario}>
                         <label style={estilos.rotulo}>Categoria:</label>
-                        <input type="text" name="categoria" value={categoria} onChange={e => setCategoria(e.target.value)} required style={estilos.entrada} placeholder="Digite a categoria" disabled={carregando} />
+                        <select name="categoria" value={categoria} onChange={e => setCategoria(e.target.value)} required disabled={carregando} style={estilos.entrada}>
+                            <option value="">Selecione...</option>
+                            {categorias.length > 0 ? (
+                                categorias.map(cat => (
+                                    <option key={cat._id} value={cat.nome}>{cat.nome}</option>
+                                ))
+                            ) : (
+                                <option value="" disabled>Nenhuma categoria encontrada</option>
+                            )}
+                        </select>
                     </div>
                     <div style={estilos.grupoFormulario}>
                         <label style={estilos.rotulo}>Descrição:</label>
-                        <textarea name="descricao" value={descricao} onChange={e => setDescricao(e.target.value)} required style={{ ...estilos.entrada, minHeight: 60 }} placeholder="Digite a descrição" disabled={carregando} />
+                        <textarea value={descricao} onChange={e => setDescricao(e.target.value)} required style={{ ...estilos.entrada, minHeight: 60 }} disabled={carregando} />
                     </div>
                     <div style={estilos.grupoFormulario}>
-                        <div style={{ marginTop: 8, display: "flex", alignItems: "center" }}>
-                            <button style={{ ...estilos.botaoAnexar }} type="button" onClick={aoClicarAnexar} disabled={carregando}>Anexar Imagem</button>
-                            <input type="file" accept="image/*" ref={refArquivo} style={{ display: "none" }} onChange={aoAnexarImagem} disabled={carregando} />
-                            {miniatura && (
-                                <a href={miniatura} download="imagem_produto.png" title="Baixar imagem base64" style={{ marginLeft: 10, display: "inline-block" }}>
-                                    <img src={miniatura} alt="Miniatura" style={{ maxHeight: 48, borderRadius: 4, verticalAlign: "middle", boxShadow: "0 1px 4px #0001", cursor: "pointer"}}/>
-                                </a>
-                            )}
-                        </div>
+                        <button type="button" style={estilos.botaoAnexar} onClick={aoClicarAnexar} disabled={carregando}>Anexar Imagem</button>
+                        <input type="file" accept="image/*" ref={refArquivo} style={{ display: "none" }} onChange={aoAnexarImagem} disabled={carregando} />
+                        {miniatura && (
+                            <a href={miniatura} download="imagem_produto.png" title="Baixar imagem" style={{ marginLeft: 10, display: "inline-block" }}>
+                                <img src={miniatura} alt="Miniatura" style={{ maxHeight: 48, borderRadius: 4, verticalAlign: "middle", boxShadow: "0 1px 4px #0001", cursor: "pointer" }} />
+                            </a>
+                        )}
                     </div>
                     <div style={estilos.linhaBotoes}>
-                        <a href="/produtos" style={{ ...estilos.botao, ...estilos.botaoVoltar, textDecoration: "none", display: "inline-block", textAlign: "center" }}>Voltar</a>
+                        <a href="/produtos" style={{ ...estilos.botao, ...estilos.botaoVoltar, textDecoration: "none", textAlign: "center" }}>Voltar</a>
                         <button type="button" onClick={aoExcluir} disabled={carregando} style={{ ...estilos.botao, background: "#888", ...(carregando ? estilos.botaoDesabilitado : {}) }}>Excluir</button>
                         <button type="submit" disabled={carregando} style={{ ...estilos.botao, ...(carregando ? estilos.botaoDesabilitado : {}) }}>{carregando ? "Salvando..." : "Salvar"}</button>
                     </div>

@@ -10,6 +10,9 @@ import Login from './views/Login';
 import Dashboard from './views/private/Dashboard';
 import Home from './views/public/Home';
 import ProdutoDetalhes from './views/public/ProdutoDetalhes';
+import Carrinho from './views/public/Carrinho';
+import FinalizarVenda from './views/public/FinalizarVenda';
+import Agradecimento from './views/public/Agradecimento';
 
 // Privadas
 
@@ -20,6 +23,8 @@ import Produtos from './views/private/Produtos';
 import NovoProduto from './views/private/NovoProduto';
 import EditarProduto from './views/private/EditarProduto';
 import Perfil from './views/private/Perfil';
+import Vendas from './views/private/Vendas';
+
 
 // Template
 import TemplateAdmin from './components/TemplateAdmin';
@@ -77,6 +82,9 @@ const App = () => {
             <Route path="/" element={<Navigate to="/home" />} />
             <Route path="/home" element={<Home />} />
             <Route path="produto/:nome" element={<ProdutoDetalhes />} />
+            <Route path="/carrinho" element={<Carrinho/> } />
+            <Route path="/finalizarvenda" element={<FinalizarVenda/> } />
+            <Route path="/agradecimento" element={<Agradecimento/> } />
           </Route>
 
           <Route element={<Middleware />}>
@@ -89,6 +97,7 @@ const App = () => {
               <Route path="/categorias/nova" element={<NovaCategoria />} />
               <Route path="/categorias/editar/:nome" element={<EditarCategoria />} />
               <Route path="/perfil" element={<Perfil />} />
+              <Route path="/vendas" element={<Vendas />} />
             </Route>
           </Route>
         </Routes>

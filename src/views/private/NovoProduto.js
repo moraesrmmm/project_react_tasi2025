@@ -152,8 +152,14 @@ export default function NovoProduto() {
                     }
                 }
             );
-            setSucesso(resposta.data._id);
-            setFormulario(estadoInicial);
+
+            if(!resposta.data.erro){
+                setSucesso(resposta.data._id);
+                setFormulario(estadoInicial);
+            }else{
+                setErro(resposta.data.erro || "Erro ao cadastrar produto. Tente novamente.");
+            }
+
         } catch (err) {
             setErro(
                 err.response?.data?.message ||

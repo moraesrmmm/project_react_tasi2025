@@ -1,4 +1,3 @@
-// Template.js
 import * as React from 'react';
 import { Outlet } from 'react-router-dom';
 import { DashboardLayout, AppProvider, PageContainer } from '@toolpad/core';
@@ -8,8 +7,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-// Defina o ícone de produto (exemplo: use DashboardIcon ou crie um novo)
-const ProductIcon = DashboardIcon; // Ou substitua por outro ícone do MUI
+const ProductIcon = DashboardIcon;
 
 const NAVIGATION = [
   {
@@ -48,7 +46,7 @@ const NAVIGATION = [
   {
     segment: 'perfil',
     title: 'Perfil',
-    icon: <AccountCircleIcon />, // Ícone de pessoa
+    icon: <AccountCircleIcon />,
   },
 ];
 
@@ -84,7 +82,7 @@ const Template = () => {
   };
 
   return (
-    <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}   branding={{ logo: <img src="https://mui.com/static/logo.png" alt="LojaMassa" />, title: 'LojaMassa', homeUrl: '/toolpad/core/introduction',}}>
+    <AppProvider navigation={NAVIGATION} router={router} theme={demoTheme}   branding={{ logo: <img src="https://brandcenter.americanas.io/wp-content/uploads/2022/02/logo_1-01-e1658341073536.png" alt="LojaMassa" />, title: '', homeUrl: '/toolpad/core/introduction',}}>
       <DashboardLayout>
         <PageContainer>
           <Outlet />

@@ -1,9 +1,31 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const TemplatePublic = () => {
   const [busca, setBusca] = useState('');
+
+  const getCarrinhoCount = () => {
+    try {
+      const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+      return carrinho.reduce((total, item) => total + (item.quantidade || 0), 0);
+    } catch {
+      return 0;
+    }
+  };
+
+  const [carrinhoCount, setCarrinhoCount] = useState(getCarrinhoCount());
+
+  React.useEffect(() => {
+    const handleStorage = () => setCarrinhoCount(getCarrinhoCount());
+    window.addEventListener('storage', handleStorage);
+    window.addEventListener('focus', handleStorage);
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('focus', handleStorage);
+    };
+  }, []);
 
   return (
     <div>
@@ -15,7 +37,7 @@ const TemplatePublic = () => {
 
       <header style={{ backgroundColor: '#be1e21' }}>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '10px 15px' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#fff', fontFamily: 'Arial, sans-serif', marginRight: '50px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#fff', fontFamily: 'Arial, sans-serif', marginRight: '50px', cursor: 'pointer' }} onClick={() => window.location.href = '/'}>
             LojaMassa
           </h1>
 
@@ -42,18 +64,29 @@ const TemplatePublic = () => {
             <FaUser className="mr-2 text-lg" style={{ color: '#fff', marginRight: '8px' }} />
             <button style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
               <div style={{ color: '#fff', fontSize: '14px', fontFamily: 'Arial, sans-serif', textAlign: 'start' }}>
-                <div style={{ fontWeight: 'bold' }}>olá, faça seu login</div>
+                <div style={{ fontWeight: 'bold', cursor: "pointer" }} onClick={ () => {window.location.href = "/login";}}>olá, faça seu login</div>
                 <div style={{ fontWeight: 'bold' }}>ou cadastre-se</div>
               </div>
             </button>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
+          <a
+            href="/carrinho"
+            style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', position: 'relative', textDecoration: 'none' }}
+          >
             <img
               src={require('../assets/cart-white.png')}
               alt="Cart Icon"
               style={{ width: '40px', height: '40px', cursor: 'pointer', marginLeft: '20px' }}
             />
-          </div>
+            {carrinhoCount > 0 && (
+              <span
+                style={{ position: 'absolute', top: '-5px', right: '10px', background: '#fff', color: '#be1e21', borderRadius: '50%', padding: '2px 7px', fontSize: '12px', fontWeight: 'bold', border: '2px solid #be1e21', minWidth: '22px', textAlign: 'center', boxShadow: '0 1px 4px rgba(0,0,0,0.15)'
+                }}
+              >
+                {carrinhoCount}
+              </span>
+            )}
+          </a>
         </div>
         <nav style={{ backgroundColor: '#be1e21', padding: '10px 0' }}>
           <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -69,15 +102,7 @@ const TemplatePublic = () => {
             ].map((item, index) => (
               <span
                 key={index}
-                style={{
-                  fontSize: '11px',
-                  fontWeight: 'bold',
-                  marginLeft: index === 0 ? '0' : '15px',
-                  color: '#fff',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                }}
-              >
+                style={{ fontSize: '11px', fontWeight: 'bold', marginLeft: index === 0 ? '0' : '15px', color: '#fff', textTransform: 'uppercase', cursor: 'pointer',}}>
                 {item}
               </span>
             ))}

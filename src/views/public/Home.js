@@ -65,50 +65,12 @@ const Home = () => {
         alignItems: 'center'
       }}>
         {Object.entries(produtosPorCategoria).map(([categoria, produtos]) => (
-          <div key={categoria} style={{
-            width: '100%',
-            marginBottom: '50px',
-            background: '#fff',
-            borderRadius: '18px',
-            boxShadow: '0 4px 24px rgba(0,0,0,0.07)',
-            padding: '32px 0 24px 0',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
-          }}>
-            <h2 style={{
-              fontSize: '2.2rem',
-              color: '#2a2a2a',
-              marginBottom: '28px',
-              letterSpacing: '1px',
-              fontWeight: 700,
-              textAlign: 'center',
-              borderBottom: '2px solid #e5e7eb',
-              width: '60%',
-              paddingBottom: '10px'
-            }}>{categoria}</h2>
-            <div style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '32px',
-              justifyContent: 'center',
-              width: '100%'
-            }}>
+          <div key={categoria} style={{ width: '100%', marginBottom: '50px', background: '#fff', borderRadius: '18px', boxShadow: '0 4px 24px rgba(0,0,0,0.07)', padding: '32px 0 24px 0', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <h2 style={{ fontSize: '2.2rem', color: '#2a2a2a', marginBottom: '28px', letterSpacing: '1px', fontWeight: 700, textAlign: 'center', borderBottom: '2px solid #e5e7eb', width: '60%', paddingBottom: '10px'}}>{categoria}</h2>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px', justifyContent: 'center', width: '100%'}}>
               {produtos.map((produto) => (
-                <Link
-                  to={`/produto/${produto.nome}`}
-                  key={produto.nome}
-                  style={{
-                    textDecoration: 'none',
-                    transition: 'transform 0.2s',
-                  }}
-                >
-                  <Card
-                    title={produto.nome}
-                    price={produto.preco}
-                    image={produto.imagem}
-                    alt={produto.nome}
-                  />
+                <Link to={`/produto/${produto.nome}`} key={produto.nome} style={{ textDecoration: 'none', transition: 'transform 0.2s'}}>
+                  <Card title={produto.nome} price={produto.preco} image={produto.imagem} alt={produto.nome}/>
                 </Link>
               ))}
             </div>

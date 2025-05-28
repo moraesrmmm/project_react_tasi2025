@@ -3,7 +3,6 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 const estilos = {
-    // ... (mantém igual)
     titulo: {
         fontSize: 22,
         fontWeight: 700,
@@ -63,7 +62,7 @@ const estilos = {
 };
 
 export default function EditarCategoria() {
-    const { nome } = useParams(); // nome da categoria na URL
+    const { nome } = useParams(); 
     const [nomeCategoria, setNomeCategoria] = useState("");
     const [idCategoria, setIdCategoria] = useState("");
     const [carregando, setCarregando] = useState(false);
@@ -78,7 +77,7 @@ export default function EditarCategoria() {
             return;
         }
         setCarregando(true);
-        axios.get(`https://backend-completo.vercel.app/app/categorias?nome_categoria=teste`, {
+        axios.get(`https://backend-completo.vercel.app/app/categorias?nome_categoria=` + nome, {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then(res => {

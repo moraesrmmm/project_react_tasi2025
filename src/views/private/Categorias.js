@@ -115,20 +115,8 @@ export default function ListaCategorias() {
                 <div style={{ color: "red", marginBottom: 10 }}>{erro}</div>
             )}
             <div style={estilos.barraAcoes}>
-                <input
-                    type="text"
-                    placeholder="Buscar por nome da categoria..."
-                    value={busca}
-                    onChange={e => setBusca(e.target.value)}
-                    style={{ ...estilos.entrada, width: 260 }}
-                />
-                <a
-                    href="/categorias/nova"
-                    style={{
-                        ...estilos.botao,
-                        textDecoration: "none"
-                    }}
-                >
+                <input type="text" placeholder="Buscar por nome da categoria..." value={busca} onChange={e => setBusca(e.target.value)} style={{ ...estilos.entrada, width: 260 }}/>
+                <a href="/categorias/nova" style={{ ...estilos.botao, textDecoration: "none"}}>
                     + Nova Categoria
                 </a>
             </div>
@@ -158,10 +146,7 @@ export default function ListaCategorias() {
                                 <tr key={cat._id}>
                                     <td style={estilos.td}>{cat.nome || "—"}</td>
                                     <td style={{ ...estilos.td, textAlign: "right" }}>
-                                        <a
-                                            href={`/categorias/editar/${cat.nome}`}
-                                            style={estilos.botaoEditar}
-                                        >
+                                        <a href={`/categorias/editar/${cat.nome}`} style={estilos.botaoEditar}>
                                             Editar
                                         </a>
                                     </td>

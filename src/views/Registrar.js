@@ -21,7 +21,7 @@ export default function CustomLogin() {
 
   const registraUsuario = async (e) => {
       e.preventDefault();
-      var url = 'https://backend-aula.vercel.app/app/registrar';
+      var url = 'https://backend-completo.vercel.app/app/registrar';
       var dados = { usuario: usuario, senha: senha, confirmar_senha: confirmar_senha };
 
       setError(false);
@@ -55,22 +55,64 @@ export default function CustomLogin() {
   return (
     <Container maxWidth="xs">
       <Paper
-        sx={{ padding: 4, marginTop: 10, color: '#fff', border: '1px solid #444', }}>
-        <Typography variant="h5" align="center" gutterBottom fontWeight="bold">
+        sx={{ padding: 4, marginTop: 10, color: '#fff', border: '1px solid #BE1E21', }}>
+        <Typography variant="h5" align="center"  gutterBottom fontWeight="bold" sx={{ color: '#BE1E21' }}>
           Registrar
         </Typography>
-        <Typography variant="body2" align="center" gutterBottom>
+        <Typography variant="body2" align="center" gutterBottom sx={{ color: '#BE1E21' }}>
           Crie sua conta para acessar o sistema.
         </Typography>
 
         <Box component="form" onSubmit={registraUsuario}>
-          <TextField fullWidth margin="normal" label="Usuário" type="text" variant="outlined" InputLabelProps={{ style: { color: '#ccc' } }} InputProps={{ style: { color: '#fff' } }} value={usuario} onChange={(e) => setUsuario(e.target.value)}
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Usuário"
+            type="text"
+            variant="outlined"
+            InputLabelProps={{ style: { color: '#000' } }}
+            InputProps={{
+              style: { color: '#000' },
+              sx: {
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#BE1E21' }
+              }
+            }}
+            value={usuario}
+            onChange={(e) => setUsuario(e.target.value)}
           />
 
-          <TextField fullWidth margin="normal" label="Senha" type="password" variant="outlined" InputLabelProps={{ style: { color: '#ccc' } }} InputProps={{ style: { color: '#fff' } }} value={senha} onChange={(e) => setSenha(e.target.value)}
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Senha"
+            type="password"
+            variant="outlined"
+            InputLabelProps={{ style: { color: '#000' } }}
+            InputProps={{
+              style: { color: '#000' },
+              sx: {
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#BE1E21' }
+              }
+            }}
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
           />
 
-          <TextField fullWidth margin="normal" label="Confirmar Senha" type="password" variant="outlined" InputLabelProps={{ style: { color: '#ccc' } }} InputProps={{ style: { color: '#fff' } }} value={confirmar_senha} onChange={(e) => setConfirmarSenha(e.target.value)}
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Confirmar Senha"
+            type="password"
+            variant="outlined"
+            InputLabelProps={{ style: { color: '#000' } }}
+            InputProps={{
+              style: { color: '#000' },
+              sx: {
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#BE1E21' }
+              }
+            }}
+            value={confirmar_senha}
+            onChange={(e) => setConfirmarSenha(e.target.value)}
           />
 
           {error && (
@@ -79,16 +121,12 @@ export default function CustomLogin() {
             </Typography>
           )}
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{
+          <Button type="submit" fullWidth variant="contained" sx={{
               mt: 2,
-              backgroundColor: '#61dafb',
-              color: '#000',
+              backgroundColor: '#BE1E21',
+              color: '#fff',
               fontWeight: 'bold',
-              '&:hover': { backgroundColor: '#4dbde9' },
+              '&:hover': { backgroundColor: '#a81a1c' },
             }}
             disabled={loading}
           >
@@ -96,7 +134,7 @@ export default function CustomLogin() {
           </Button>
 
           <Typography align="center" sx={{ mt: 2 }}>
-            <a href="/login" style={{ color: '#61dafb', textDecoration: 'none' }}>
+            <a href="/login" style={{ color: '#BE1E21', textDecoration: 'none' }}>
               Já tem uma conta? Entre aqui
             </a>
           </Typography>

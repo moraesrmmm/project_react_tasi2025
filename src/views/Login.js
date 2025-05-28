@@ -34,7 +34,7 @@ export default function CustomLogin() {
                     localStorage.setItem("token", response.data.token);
                     localStorage.setItem("usuario", usuario);
                     localStorage.setItem("horaAcesso", new Date().toLocaleString());
-                    window.location.href = "/dashboard";
+                    window.location.href = "/produtos";
                 } else {
                     setError(true);
                     setErrorMessage('Usuário ou senha inválidos!');
@@ -57,28 +57,15 @@ export default function CustomLogin() {
                 border: '1px solid #444',
                 }}
             >
-                <Typography
-                variant="h5"
-                align="center"
-                gutterBottom
-                fontWeight="bold"
-                >
+                <Typography color='#be1e21' variant="h5" align="center" gutterBottom fontWeight="bold">
                 Entrar
                 </Typography>
-                <Typography variant="body2" align="center" gutterBottom>
+                <Typography color='#be1e21' variant="body2" align="center" gutterBottom>
                 Bem-vindo de volta! Entre na sua conta.
                 </Typography>
 
                 <Box component="form" onSubmit={ValidaUsuario}>
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    label="Usuário"
-                    type="text"
-                    variant="outlined"
-                    InputLabelProps={{ style: { color: '#000' } }}
-                    InputProps={{ style: { color: '#000' } }}
-                    sx={{
+                <TextField fullWidth margin="normal" label="Usuário" type="text" variant="outlined" InputLabelProps={{ style: { color: '#000' } }} InputProps={{ style: { color: '#000' } }} sx={{
                         '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                             borderColor: '#be1e21',
                         },
@@ -87,15 +74,7 @@ export default function CustomLogin() {
                     onChange={(e) => setUsuario(e.target.value)}
                 />
 
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    label="Senha"
-                    type="password"
-                    variant="outlined"
-                    InputLabelProps={{ style: { color: '#000' } }}
-                    InputProps={{ style: { color: '#000' } }}
-                    sx={{
+                <TextField fullWidth margin="normal" label="Senha" type="password" variant="outlined" InputLabelProps={{ style: { color: '#000' } }} InputProps={{ style: { color: '#000' } }} sx={{
                         '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                             borderColor: '#be1e21',
                         },
@@ -105,21 +84,13 @@ export default function CustomLogin() {
                 />
 
                 {error && (
-                    <Typography
-                    variant="body2"
-                    color="error"
-                    align="center"
-                    sx={{ mt: 2 }}
+                    <Typography variant="body2" color="error" align="center" sx={{ mt: 2 }}
                     >
                     {errorMessage}
                     </Typography>
                 )}
 
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{
+                <Button type="submit" fullWidth variant="contained" sx={{
                     mt: 2,
                     backgroundColor: '#be1e21',
                     color: '#white',
@@ -132,9 +103,7 @@ export default function CustomLogin() {
                 </Button>
 
                 <Typography align="center" sx={{ mt: 2 }}>
-                    <a
-                    href="/forgot-senha"
-                    style={{
+                    <a href="/forgot-senha" style={{
                         color: '#be1e21',
                         textDecoration: 'none',
                     }}
@@ -144,9 +113,7 @@ export default function CustomLogin() {
                 </Typography>
 
                 <Typography align="center" sx={{ mt: 2 }}>
-                    <a
-                    href="/registrar"
-                    style={{
+                    <a href="/registrar" style={{
                         color: '#be1e21',
                         textDecoration: 'none',
                     }}

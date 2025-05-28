@@ -14,7 +14,6 @@ const Perfil = () => {
         const token = localStorage.getItem('token') || '';
         const horaAcesso = localStorage.getItem('horaAcesso') || new Date().toLocaleString();
 
-        // Salva a hora de acesso se não existir
         if (!localStorage.getItem('horaAcesso')) {
             localStorage.setItem('horaAcesso', horaAcesso);
         }

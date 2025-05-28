@@ -125,15 +125,7 @@ export default function NovaCategoria() {
                 <form onSubmit={aoEnviar}>
                     <div style={estilos.grupoFormulario}>
                         <label style={estilos.rotulo}>Nome da Categoria:</label>
-                        <input
-                            type="text"
-                            name="nome_categoria"
-                            value={nomeCategoria}
-                            onChange={e => setNomeCategoria(e.target.value)}
-                            required
-                            style={estilos.entrada}
-                            placeholder="Digite o nome da categoria"
-                        />
+                        <input type="text" name="nome_categoria" value={nomeCategoria} onChange={e => setNomeCategoria(e.target.value)} required style={estilos.entrada} placeholder="Digite o nome da categoria"/>
                     </div>
                     <div style={estilos.linhaBotoes}>
                         <a href="/categorias" style={{ ...estilos.botao, ...estilos.botaoVoltar, textDecoration: "none", display: "inline-block", textAlign: "center" }}>

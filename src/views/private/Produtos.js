@@ -160,18 +160,8 @@ export default function ListaProdutos() {
                 <div style={{ color: "red", marginBottom: 10 }}>{erro}</div>
             )}
             <div style={estilos.barraAcoes}>
-                <input
-                    type="text"
-                    placeholder="Buscar por nome ou descrição..."
-                    value={busca}
-                    onChange={e => setBusca(e.target.value)}
-                    style={{ ...estilos.entrada, width: 260 }}
-                />
-                <select
-                    value={categoriaFiltro}
-                    onChange={e => setCategoriaFiltro(e.target.value)}
-                    style={estilos.entrada}
-                >
+                <input type="text" placeholder="Buscar por nome ou descrição..." value={busca} onChange={e => setBusca(e.target.value)} style={{ ...estilos.entrada, width: 260 }}/>
+                <select value={categoriaFiltro} onChange={e => setCategoriaFiltro(e.target.value)} style={estilos.entrada}>
                     <option value="">Todas as categorias</option>
                     {categorias && categorias.map && categorias.map(cat => (
                         <option key={cat._id} value={cat.nome}>
@@ -179,9 +169,7 @@ export default function ListaProdutos() {
                         </option>
                     ))}
                 </select>
-                <a
-                    href="/produtos/novo"
-                    style={{
+                <a href="/produtos/novo" style={{
                         ...estilos.botao,
                         ...estilos.botaoNovo,
                         textDecoration: "none"
@@ -242,10 +230,7 @@ export default function ListaProdutos() {
                                     <td style={estilos.td}>{produto.quantidade != null ? produto.quantidade : "—"}</td>
                                     <td style={estilos.td}>{produto.descricao || "—"}</td>
                                     <td style={estilos.td}>
-                                        <a
-                                            href={`/produtos/editar/${produto.nome}`}
-                                            style={estilos.botaoEditar}
-                                        >
+                                        <a href={`/produtos/editar/${produto.nome}`} style={estilos.botaoEditar}>
                                             Editar
                                         </a>
                                     </td>
