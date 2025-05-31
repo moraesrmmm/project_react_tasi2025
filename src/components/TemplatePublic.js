@@ -17,15 +17,19 @@ const TemplatePublic = () => {
 
   const [carrinhoCount, setCarrinhoCount] = useState(getCarrinhoCount());
 
-  React.useEffect(() => {
-    const handleStorage = () => setCarrinhoCount(getCarrinhoCount());
-    window.addEventListener('storage', handleStorage);
-    window.addEventListener('focus', handleStorage);
-    return () => {
-      window.removeEventListener('storage', handleStorage);
-      window.removeEventListener('focus', handleStorage);
-    };
-  }, []);
+React.useEffect(() => {
+  const handleStorage = () => setCarrinhoCount(getCarrinhoCount());
+
+  window.addEventListener('storage', handleStorage);
+  window.addEventListener('focus', handleStorage);
+  window.addEventListener('carrinhoAtualizado', handleStorage);
+
+  return () => {
+    window.removeEventListener('storage', handleStorage);
+    window.removeEventListener('focus', handleStorage);
+    window.removeEventListener('carrinhoAtualizado', handleStorage); 
+  };
+}, []);
 
   return (
     <div>

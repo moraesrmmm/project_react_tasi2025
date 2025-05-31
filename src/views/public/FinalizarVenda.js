@@ -111,6 +111,7 @@ const FinalizarVenda = () => {
                     localStorage.removeItem("frete");
                     localStorage.removeItem("desconto");
                     localStorage.removeItem("valor_total_da_compra");
+                    window.dispatchEvent(new Event('carrinhoAtualizado'));
                     navigate("/agradecimento");
                 }
             } else {

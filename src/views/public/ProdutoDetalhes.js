@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ProdutoDetalhes() {
     const [produto, setProduto] = useState(null);
@@ -14,14 +16,14 @@ function ProdutoDetalhes() {
         if (idx > -1) {
             const novaQtd = carrinho[idx].quantidade + qtd;
             if (novaQtd > produto.quantidade) {
-                alert(`Estoque insuficiente. Apenas ${produto.quantidade} disponível.`);
+                toast.warning(`Estoque insuficiente. Apenas ${produto.quantidade} disponível.`);
                 return;
             }
             carrinho[idx].quantidade = novaQtd;
             carrinho[idx].preco_total = novaQtd * carrinho[idx].preco;
         } else {
             if (qtd > produto.quantidade) {
-                alert(`Estoque insuficiente. Apenas ${produto.quantidade} disponível.`);
+                toast.warning(`Estoque insuficiente. Apenas ${produto.quantidade} disponível.`);
                 return;
             }
             carrinho.push({
@@ -29,9 +31,10 @@ function ProdutoDetalhes() {
                 quantidade: qtd,
                 preco_total: qtd * produto.preco
             });
-            alert(`Produto adicionado ao carrinho! Quantidade: ${quantidade}`);
         }
         localStorage.setItem('carrinho', JSON.stringify(carrinho));
+        toast.success(`Produto adicionado ao carrinho! Quantidade: ${quantidade}`);
+        window.dispatchEvent(new Event('carrinhoAtualizado'));
     };
 
     useEffect(() => {
@@ -39,7 +42,6 @@ function ProdutoDetalhes() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoicm9tdWxvX21vcmFlcyIsImlhdCI6MTc0NzI2OTc2NiwiZXhwIjoxNzQ3MzU2MTY2fQ.-0Txbs4zLkQWncIq6hWOaDjVfLzja0dS8jouv_OZEn8`
             },
         })
             .then(res => res.json())
@@ -52,22 +54,17 @@ function ProdutoDetalhes() {
 
     const handleComprar = () => {
         if (quantidade > produto.quantidade) {
-            alert(`Estoque insuficiente. Apenas ${produto.quantidade} disponível.`);
+            toast.error(`Estoque insuficiente. Apenas ${produto.quantidade} disponível.`);
             return;
-        }else{
+        } else {
             adicionarAoCarrinhoLS(produto, quantidade);
         }
-        alert('Redirecionando para o carrinho...');
-        navigate("/carrinho");
+        toast.success('Redirecionando para o carrinho...');
+        setTimeout(() => navigate("/carrinho"), 1500);
     };
 
     const handleAdicionarCarrinho = () => {
-        if (quantidade > produto.quantidade) {
-            alert(`Estoque insuficiente. Apenas ${produto.quantidade} disponível.`);
-            return;
-        }else{
-            adicionarAoCarrinhoLS(produto, quantidade);
-        }
+        adicionarAoCarrinhoLS(produto, quantidade);
     };
 
     const aumentarQuantidade = () => {
@@ -89,39 +86,42 @@ function ProdutoDetalhes() {
     }
 
     return (
-        <div style={{
-            maxWidth: 700,
-            margin: '40px auto',
-            padding: 24,
-            border: '1px solid #ddd',
-            borderRadius: 8,
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: 32
-        }}>
-            <img src={produto.imagem} alt={produto.nome} style={{ width: 250, borderRadius: 8, objectFit: 'cover' }} />
-            <div style={{ flex: 1 }}>
-                <h2>{produto.nome}</h2>
-                <p>{produto.descricao}</p>
-                <h3>R$ {produto.preco?.toFixed(2)}</h3>
-                <div style={{ fontSize: 14, marginTop: 8, color: "#666" }}>
-                    Disponível: {produto.quantidade} unidades
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 16 }}>
-                    <button onClick={diminuirQuantidade} style={btnQtd}>-</button>
-                    <span style={{ minWidth: 32, textAlign: 'center', fontSize: 18 }}>{quantidade}</span>
-                    <button onClick={aumentarQuantidade} style={btnQtd}>+</button>
-                </div>
-                <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
-                    <button onClick={handleComprar} style={btnPrincipal}>
-                        Comprar
-                    </button>
-                    <button onClick={handleAdicionarCarrinho} style={btnSecundario}>
-                        Adicionar ao Carrinho
-                    </button>
+        <>
+            <div style={{
+                maxWidth: 700,
+                margin: '40px auto',
+                padding: 24,
+                border: '1px solid #ddd',
+                borderRadius: 8,
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: 32
+            }}>
+                <img src={produto.imagem} alt={produto.nome} style={{ width: 250, borderRadius: 8, objectFit: 'cover' }} />
+                <div style={{ flex: 1 }}>
+                    <h2>{produto.nome}</h2>
+                    <p>{produto.descricao}</p>
+                    <h3>R$ {produto.preco?.toFixed(2)}</h3>
+                    <div style={{ fontSize: 14, marginTop: 8, color: "#666" }}>
+                        Disponível: {produto.quantidade} unidades
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 16 }}>
+                        <button onClick={diminuirQuantidade} style={btnQtd}>-</button>
+                        <span style={{ minWidth: 32, textAlign: 'center', fontSize: 18 }}>{quantidade}</span>
+                        <button onClick={aumentarQuantidade} style={btnQtd}>+</button>
+                    </div>
+                    <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+                        <button onClick={handleComprar} style={btnPrincipal}>
+                            Comprar
+                        </button>
+                        <button onClick={handleAdicionarCarrinho} style={btnSecundario}>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+            <ToastContainer position="top-center" autoClose={2500} hideProgressBar newestOnTop />
+        </>
     );
 }
 
