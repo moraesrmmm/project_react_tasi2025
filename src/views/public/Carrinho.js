@@ -1,4 +1,3 @@
-// Carrinho com layout SECTIONS (mais moderno)
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

@@ -26,7 +26,7 @@ const Perfil = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('horaAcesso');
         localStorage.removeItem('logado');
-        window.location.href = '/login'; // Redireciona para tela de login
+        window.location.href = '/login'; 
     };
 
     return (

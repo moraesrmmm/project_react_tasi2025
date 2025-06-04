@@ -82,7 +82,6 @@ export default function Vendas() {
 
     useEffect(() => {
         carregarVendas();
-        // eslint-disable-next-line
     }, []);
 
     async function carregarVendas() {
@@ -125,8 +124,8 @@ export default function Vendas() {
 
     function formatarData(data) {
         if (!data) return "—";
-        const partes = data.split('T')[0].split('-'); // ['2025', '06', '04']
-        return `${partes[2]}/${partes[1]}/${partes[0]}`; // 04/06/2025
+        const partes = data.split('T')[0].split('-'); 
+        return `${partes[2]}/${partes[1]}/${partes[0]}`; 
     }
 
     function formatarMoeda(valor) {

@@ -41,7 +41,7 @@ const estilos = {
     },
     botao: {
         padding: "10px 18px",
-        background: "#BE1E21", // alterado para usar rgba
+        background: "#BE1E21", 
         color: "#fff",
         border: "none",
         borderRadius: 4,
@@ -51,7 +51,7 @@ const estilos = {
         transition: "background 0.2s"
     },
     botaoDesabilitado: {
-        background: "rgba(190, 30, 33, 0.5)", // alterado para usar rgba
+        background: "rgba(190, 30, 33, 0.5)", 
         cursor: "not-allowed"
     },
     botaoVoltar: {
