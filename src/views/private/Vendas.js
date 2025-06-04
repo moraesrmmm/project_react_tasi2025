@@ -125,8 +125,8 @@ export default function Vendas() {
 
     function formatarData(data) {
         if (!data) return "—";
-        const d = new Date(data);
-        return d.toLocaleDateString();
+        const partes = data.split('T')[0].split('-'); // ['2025', '06', '04']
+        return `${partes[2]}/${partes[1]}/${partes[0]}`; // 04/06/2025
     }
 
     function formatarMoeda(valor) {
